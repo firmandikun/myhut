@@ -41,6 +41,8 @@
                     <tbody>
                         @foreach ($operations as $operation)
                             <tr>
+                                <td class="px-4 py-2 border">{{ $operation->category->name }}</td>
+                                <td class="px-4 py-2 border">{{ $operation->description }}</td>
                                 <td class="px-4 py-2 border">
                                     @if ($operation->category->name === 'Biaya Admin')
                                         {{ $operation->cost }}%
