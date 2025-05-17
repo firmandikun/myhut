@@ -130,6 +130,11 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between">
                             <h6 class="mb-2 fw-bold text-lg">Operational</h6>
+                             <a href="/operations"
+                                class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
+                                View All
+                                <iconify-icon icon="solar:alt-arrow-right-linear" class="icon"></iconify-icon>
+                            </a>
                         </div>
                         @php
                             $operationIcons = [
