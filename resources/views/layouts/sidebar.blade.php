@@ -4,7 +4,7 @@
     </button>
     <div>
         <a href="{{ url('/') }}" class="sidebar-logo">
-            <h2>My Hut</h2>
+            <h2 class="font-bold" >My Hut</h2>
         </a>
     </div>
     <div class="sidebar-menu-area">
