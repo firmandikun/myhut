@@ -41,10 +41,12 @@
                     <tbody>
                         @foreach ($operations as $operation)
                             <tr>
-                                <td class="px-4 py-2 border">{{ $operation->category->name }}</td>
-                                <td class="px-4 py-2 border">{{ $operation->description }}</td>
                                 <td class="px-4 py-2 border">
-                                    {{ 'Rp' . number_format($operation->cost, 0, ',', '.') }}
+                                    @if ($operation->category->name === 'Biaya Admin')
+                                        {{ $operation->cost }}%
+                                    @else
+                                        {{ 'Rp' . number_format($operation->cost, 0, ',', '.') }}
+                                    @endif
                                 </td>
                                 <td class="px-4 py-2 border">
                                     {{ $operation->date ? \Carbon\Carbon::parse($operation->date)->format('Y-m-d') : 'N/A' }}
