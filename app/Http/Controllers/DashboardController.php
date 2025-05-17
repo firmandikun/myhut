@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Transaction;
 use App\Models\Store;
-use App\Models\Operation;  // Tambahkan model Operation
+use App\Models\Operation;
+use App\Models\OperationCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -75,8 +76,35 @@ class DashboardController extends Controller
         $totalAsset = Product::select(DB::raw('SUM(stock * price) as total_asset'))->value('total_asset');
         $potentialRevenue = Product::select(DB::raw('SUM(stock * sale_price) as total'))->value('total');
 
+       // Nilai default
+        $adminCost = 0;
+        $netRevenue = $potentialRevenue;
 
 
-        return view('dashboard.index', compact('stats', 'lowStockProducts', 'topProducts', 'stores', 'storeId', 'operations', 'totalProducts', 'totalAsset', 'potentialRevenue'));
+        $adminCategory = OperationCategory::where('name', 'Biaya Admin')->first();
+
+        if ($adminCategory) {
+            $adminOperation = $adminCategory->operations()->first();
+
+            if ($adminOperation && $adminOperation->cost) {
+                if (strtolower($adminOperation->description) === 'persen') {
+
+                    $adminPercentage = (float) $adminOperation->cost;
+
+                    $adminCost = $potentialRevenue * ($adminPercentage / 100);
+
+                    // Kurangi total revenue dengan biaya admin
+                    $netRevenue = $potentialRevenue - $adminCost;
+
+
+                }
+            }
+        }
+
+
+
+
+
+        return view('dashboard.index', compact('stats', 'lowStockProducts', 'topProducts', 'stores', 'storeId', 'operations', 'totalProducts', 'totalAsset', 'netRevenue'));
     }
 }

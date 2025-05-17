@@ -70,7 +70,7 @@
                                         <div>
                                             <div class="text-secondary-light text-md fw-medium">Potential Revenue (if all stock sold)</div>
                                             <div class="fw-semibold">
-                                                Rp{{ number_format($potentialRevenue, 0, ',', '.') }}
+                                                Rp{{ number_format($netRevenue, 0, ',', '.') }}
                                             </div>
                                         </div>
                                     </div>
