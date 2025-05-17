@@ -228,7 +228,7 @@
                 <div class="card h-100">
                     <div class="card-body p-24">
                         <div class="d-flex align-items-center flex-wrap gap-2 justify-content-between mb-20">
-                            <h6 class="mb-2 fw-bold text-lg">Stock Product</h6>
+                            <h6 class="mb-2 fw-bold text-lg">Product stock is almost out</h6>
                             <a href="/products/list"
                                 class="text-primary-600 hover-text-primary d-flex align-items-center gap-1">
                                 View All
