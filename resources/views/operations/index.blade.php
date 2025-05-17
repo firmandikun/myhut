@@ -31,8 +31,8 @@
             <table class="table bordered-table mb-0" id="dataTable" data-page-length='10'>
                 <thead>
                     <tr>
-                        <th class="px-4 py-2 border">Description</th>
                         <th class="px-4 py-2 border">Expense Category</th>
+                        <th class="px-4 py-2 border">Description</th>
                         <th class="px-4 py-2 border">Cost</th>
                         <th class="px-4 py-2 border">Date</th> <!-- New Column for Date -->
                         <th class="px-4 py-2 border">Actions</th>
@@ -41,8 +41,8 @@
                 <tbody>
                     @foreach ($operations as $operation)
                         <tr>
-                            <td class="px-4 py-2 border">{{ $operation->description }}</td>
                             <td class="px-4 py-2 border">{{ $operation->category->name }}</td>
+                            <td class="px-4 py-2 border">{{ $operation->description }}</td>
                             <td class="px-4 py-2 border">{{ number_format($operation->cost, 2) }}</td>
                             <td class="px-4 py-2 border">{{ $operation->date ? \Carbon\Carbon::parse($operation->date)->format('Y-m-d') : 'N/A' }}</td> <!-- Display Date -->
                             <td class="d-flex align-items-center justify-content-center gap-2">
