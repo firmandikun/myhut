@@ -24,13 +24,16 @@
     <div class="dashboard-main-body">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
             <h6 class="fw-semibold mb-0">Dashboard</h6>
-            <ul class="d-flex align-items-center gap-2">
+
+             @if (Auth::user()->role == 'admin')
+                    <ul class="d-flex align-items-center gap-2">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <a href="{{ route('stores.create') }}" class="btn btn-primary">
                         Create Store
                     </a>
                 </div>
             </ul>
+                @endif
         </div>
         <div class="card basic-data-table">
             <div class="card-header">
@@ -42,7 +45,9 @@
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
-                            <th scope="col">Action</th>
+                              @if (Auth::user()->role == 'admin')
+                                <th scope="col">Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -58,19 +63,15 @@
                                 <td>
                                     <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ $category->description }}</h6>
                                 </td>
+                                @if (Auth::user()->role == 'admin')
+                                    <td>
+                                        <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ $category->description }}</h6>
                                 <td class=" d-flex align-items-center justify-content-center gap-2">
                                     <a href="{{ route('categories.edit', $category->id) }}"
                                         class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center">
                                         <iconify-icon icon="lucide:edit"></iconify-icon>
                                     </a>
-                                    {{-- <form action="{{ route('categories.destroy', $category->id) }}" method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center">
-                                            <iconify-icon icon="mingcute:delete-2-line"></iconify-icon></button>
-                                    </form> --}}
+
                                     <form action="{{ route('categories.destroy', $category->id) }}" method="POST" class="delete-form">
                                         @csrf
                                         @method('DELETE')
@@ -80,6 +81,7 @@
                                     </form>
 
                                 </td>
+                                @endif
                             </tr>
                         @endforeach
 

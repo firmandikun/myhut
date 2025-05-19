@@ -25,13 +25,16 @@
     <div class="dashboard-main-body">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
             <h6 class="fw-semibold mb-0">Dashboard</h6>
-            <ul class="d-flex align-items-center gap-2">
+             @if (Auth::user()->role == 'admin')
+                                <ul class="d-flex align-items-center gap-2">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <a href="{{ route('transactions.create') }}" class="btn btn-primary">
                        Create Transactions
                     </a>
                 </div>
             </ul>
+                            @endif
+
         </div>
         <div class="card basic-data-table">
             <div class="card-header">
@@ -96,7 +99,9 @@
                             <th>Quantity</th>
                             <th>Total Transaction</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                             @if (Auth::user()->role == 'admin')
+                                <th scope="col">Action</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -108,7 +113,8 @@
                                 <td>{{ $trx->quantity }}</td>
                                 <td>{{ $trx->total_price }}</td>
                                 <td>{{ ucfirst($trx->status) }}</td>
-                                <td class=" d-flex align-items-center justify-content-center gap-2">
+                                  @if (Auth::user()->role == 'admin')
+                                  <td class=" d-flex align-items-center justify-content-center gap-2">
                                     <a href="{{ route('transactions.edit', $trx->id) }}"
                                         class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center">
                                         <iconify-icon icon="lucide:edit"></iconify-icon>
@@ -123,6 +129,8 @@
                                     </form>
 
                                 </td>
+                            @endif
+
                             </tr>
                         @endforeach
                     </tbody>

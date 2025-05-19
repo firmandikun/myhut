@@ -4,13 +4,16 @@
 <div class="dashboard-main-body">
     <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-24">
         <h6 class="fw-semibold mb-0">List Categories Operasional</h6>
-        <ul class="d-flex align-items-center gap-2">
+
+         @if (Auth::user()->role == 'admin')
+                               <ul class="d-flex align-items-center gap-2">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <a href="{{ route('operations.categories.create') }}" class="btn btn-primary">
                     Create tegories Operasional
                 </a>
             </div>
         </ul>
+                            @endif
     </div>
 
     <div class="card basic-data-table" >
@@ -22,14 +25,17 @@
                 <thead>
                     <tr>
                         <th>Name Category</th>
-                        <th>Action</th>
+                           @if (Auth::user()->role == 'admin')
+                                <th scope="col">Action</th>
+                            @endif
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($categories as $i => $category)
                         <tr>
                             <td>{{ $category->name }}</td>
-                            <td class=" d-flex align-items-center justify-content-center gap-2">
+                              @if (Auth::user()->role == 'admin')
+                                 <td class=" d-flex align-items-center justify-content-center gap-2">
                                 <a href="{{ route('operations.categories.edit', $category->id) }}"
                                     class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center">
                                     <iconify-icon icon="lucide:edit"></iconify-icon>
@@ -43,6 +49,8 @@
                                         <iconify-icon icon="mingcute:delete-2-line"></iconify-icon></button>
                                 </form>
                             </td>
+                            @endif
+
                         </tr>
                     @endforeach
                 </tbody>
