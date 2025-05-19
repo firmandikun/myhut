@@ -127,7 +127,7 @@
                 <div class="card text-white bg-info">
                     <div class="card-body">
                         <h5 class="card-title">Total Pendapatan</h5>
-                        <p class="card-text h4">Rp {{ number_format($totalRevenue, 2, ',', '.') }}</p>
+                        <p class="card-text h4">Rp {{ number_format($netRevenue, 2, ',', '.') }}</p>
                     </div>
                 </div>
             </div>
