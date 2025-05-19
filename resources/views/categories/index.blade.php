@@ -45,47 +45,43 @@
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Description</th>
-                              @if (Auth::user()->role == 'admin')
+                            @if (Auth::user()->role == 'admin')
                                 <th scope="col">Action</th>
                             @endif
                         </tr>
                     </thead>
-                    <tbody>
+                  <tbody>
+    @foreach ($categories as $category)
+        <tr>
+            <td>
+                <div class="d-flex align-items-center">
+                    <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ $category->name }}</h6>
+                </div>
+            </td>
+            <td>
+                <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ $category->description }}</h6>
+            </td>
 
-                        @foreach ($categories as $category)
-                            <tr>
+            @if (Auth::user()->role == 'admin')
+                <td class="d-flex align-items-center justify-content-center gap-2">
+                    <a href="{{ route('categories.edit', $category->id) }}"
+                        class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center">
+                        <iconify-icon icon="lucide:edit"></iconify-icon>
+                    </a>
 
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ $category->name }}</h6>
-                                    </div>
-                                </td>
-                                <td>
-                                    <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ $category->description }}</h6>
-                                </td>
-                                @if (Auth::user()->role == 'admin')
-                                    <td>
-                                        <h6 class="text-md mb-0 fw-medium flex-grow-1">{{ $category->description }}</h6>
-                                <td class=" d-flex align-items-center justify-content-center gap-2">
-                                    <a href="{{ route('categories.edit', $category->id) }}"
-                                        class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center">
-                                        <iconify-icon icon="lucide:edit"></iconify-icon>
-                                    </a>
+                    <form action="{{ route('categories.destroy', $category->id) }}" method="POST" class="delete-form">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn-delete w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center">
+                            <iconify-icon icon="mingcute:delete-2-line"></iconify-icon>
+                        </button>
+                    </form>
+                </td>
+            @endif
+        </tr>
+    @endforeach
+</tbody>
 
-                                    <form action="{{ route('categories.destroy', $category->id) }}" method="POST" class="delete-form">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button" class="btn-delete w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center">
-                                            <iconify-icon icon="mingcute:delete-2-line"></iconify-icon>
-                                        </button>
-                                    </form>
-
-                                </td>
-                                @endif
-                            </tr>
-                        @endforeach
-
-                    </tbody>
                 </table>
             </div>
         </div>
