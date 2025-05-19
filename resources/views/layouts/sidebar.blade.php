@@ -111,6 +111,11 @@
                 </a>
             </li>
 
+            <a href="/transactions/report">
+                <span>Report</span>
+            </a>
+            </li>
+
         </ul>
     </div>
 </aside>

@@ -80,13 +80,17 @@ class DashboardController extends Controller
         $adminCost = 0;
         $netRevenue = $potentialRevenue;
 
+        // Cari kategori "biaya admin"
+        $adminCategory = OperationCategory::where('name', 'Biaya Admin')->first();
 
         $adminCategory = OperationCategory::where('name', 'Biaya Admin')->first();
 
         if ($adminCategory) {
+            // Ambil operasi pertama dari kategori Biaya Admin
             $adminOperation = $adminCategory->operations()->first();
 
             if ($adminOperation && $adminOperation->cost) {
+                // Pastikan cost adalah dalam persen
                 if (strtolower($adminOperation->description) === 'persen') {
 
                     $adminPercentage = (float) $adminOperation->cost;

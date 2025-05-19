@@ -41,6 +41,9 @@ Route::prefix('operations/categories')->name('operations.categories.')->group(fu
     Route::delete('/{id}', [OperationCategoryController::class, 'destroy'])->name('destroy');
 });
 
+Route::get('/transactions/report', [TransactionController::class, 'report'])->name('transactions.report');
+Route::get('/transactions/export', [TransactionController::class, 'export'])->name('transactions.export');
+
 
 // Transaksi
 Route::resource('transactions', TransactionController::class);

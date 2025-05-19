@@ -8,6 +8,8 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\TransactionsExport;
 
 
 
@@ -207,6 +209,114 @@ class TransactionController extends Controller
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
+
+
+public function report(Request $request)
+{
+    $query = Transaction::with(['product', 'store']);
+
+    // Filter berdasarkan status jika ada
+    if ($request->has('status') && $request->status != '') {
+        $query->where('status', $request->status);
+    }
+
+    // Filter berdasarkan store_id jika ada
+    if ($request->has('store_id') && $request->store_id != '') {
+        $query->where('store_id', $request->store_id);
+    }
+
+    // Filter berdasarkan periode
+    if ($request->has('period')) {
+        switch ($request->period) {
+            case 'today':
+                $query->whereDate('date_sale', Carbon::today());
+                break;
+            case 'this_week':
+                // Perbaikan filter minggu ini
+                $query->whereBetween('date_sale', [
+                    Carbon::now()->startOfWeek(Carbon::MONDAY), // Mulai Senin
+                    Carbon::now()->endOfWeek(Carbon::SUNDAY)    // Sampai Minggu
+                ]);
+                break;
+            case 'this_month':
+                $query->whereBetween('date_sale', [
+                    Carbon::now()->startOfMonth(),
+                    Carbon::now()->endOfMonth()
+                ]);
+                break;
+            case 'custom':
+                if ($request->has('start_date') && $request->start_date != '') {
+                    $query->whereDate('date_sale', '>=', $request->start_date);
+                }
+                if ($request->has('end_date') && $request->end_date != '') {
+                    $query->whereDate('date_sale', '<=', $request->end_date);
+                }
+                break;
+        }
+    } else {
+        // Default: bulan ini jika tidak ada filter periode
+        $query->whereBetween('date_sale', [
+            Carbon::now()->startOfMonth(),
+            Carbon::now()->endOfMonth()
+        ]);
+    }
+
+    // Hitung total sebelum pagination
+    $totalQuantity = $query->sum('quantity');
+    $totalRevenue = $query->sum('total_price');
+
+    // Ambil data transaksi dengan pagination
+    $transactions = $query->latest('date_sale')->paginate(10);
+
+    // Ambil data store untuk dropdown filter
+    $stores = Store::all();
+
+    return view('transactions.report', compact('transactions', 'stores', 'totalQuantity', 'totalRevenue'));
+}
+
+public function export(Request $request)
+{
+    $query = Transaction::with(['product', 'store']);
+
+    // Filter berdasarkan status jika ada
+    if ($request->has('status') && $request->status != '') {
+        $query->where('status', $request->status);
+    }
+
+    // Filter berdasarkan store_id jika ada
+    if ($request->has('store_id') && $request->store_id != '') {
+        $query->where('store_id', $request->store_id);
+    }
+
+    // Filter berdasarkan periode
+    if ($request->has('period')) {
+        switch ($request->period) {
+            case 'today':
+                $query->whereDate('date_sale', Carbon::today());
+                break;
+            case 'this_week':
+                $query->whereBetween('date_sale', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()]);
+                break;
+            case 'this_month':
+                $query->whereBetween('date_sale', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()]);
+                break;
+            case 'custom':
+                if ($request->has('start_date') && $request->start_date != '') {
+                    $query->whereDate('date_sale', '>=', $request->start_date);
+                }
+                if ($request->has('end_date') && $request->end_date != '') {
+                    $query->whereDate('date_sale', '<=', $request->end_date);
+                }
+                break;
+        }
+    }
+
+    $transactions = $query->latest('date_sale')->get();
+
+    $fileName = 'laporan-transaksi-' . now()->format('Y-m-d') . '.xlsx';
+
+    return Excel::download(new TransactionsExport($transactions), $fileName);
+}
 
     public function destroy($id)
     {
